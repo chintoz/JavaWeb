@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>GitHub User's Favourite Programming Language</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Welcome to GitHub User's Favourite Programming Language</h1>
+	<form method="get" action="/user">
+		<table>
+			<tr>
+				<td>
+					<p>GitHub User Name:</p>
+				</td>
+				<td><input type="text" name="userName" value=""
+					required="required" /></td>
+				<td><input type="submit" value="Send" /></td>
+				<td colspan="3">
+					<div th:if="${language != null}" style="color: green">
+						<span
+							th:text="${'[' + userName + '] favourite language/s: ' + language}" />
+					</div>
+
+					<div th:if="${errors != null and errors.size() > 0}"
+						style="color: red">
+						<span th:each="error,itrStat : ${errors}" th:text="${error}" />
+					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>
