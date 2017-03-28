@@ -17,3 +17,13 @@ To run the application, you need Java JDK 8 + Maven 3, and follow next steps
 1. mvn clean install 
 2. mvn spring-boot:run 
 3. The web application will start on port 8080. To try it you should use next URL: http://localhost:8080 
+
+UNIT TESTS
+
+To launch tests, run without disable test execution
+
+1. mvn clean install 
+
+To disable test execution launch
+
+1. mvn -Dmaven.test.skip=true clean install 
