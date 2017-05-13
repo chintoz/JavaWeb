@@ -134,7 +134,7 @@ public class UserServiceTest {
 			String mockPath = "responses/jjmena.json";
 
 			server.stubFor(get(urlEqualTo(path.replace(":user", userName))).willReturn(aResponse().withStatus(200)
-					.withHeader("Content-Type", "application/json;").withBodyFile(mockPath)));
+					.withHeader("Content-Type", "application/json; charset=utf-8").withBodyFile(mockPath)));
 
 			// Call with an existing user
 			List<String> favouriteLanguages = userService.favouriteLanguages(userName);
