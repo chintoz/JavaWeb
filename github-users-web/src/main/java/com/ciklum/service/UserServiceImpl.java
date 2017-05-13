@@ -1,21 +1,21 @@
 package com.ciklum.service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import javax.net.ssl.HttpsURLConnection;
-
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ciklum.model.Repo;
 
 /**
  * Service implementation for UserService
@@ -26,41 +26,35 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class UserServiceImpl implements UserService {
 
-	private static final String GITHUB_API_USER_URL = "https://api.github.com/users/";
-	private static final String GITHUB_API_USER_REPOS = "/repos";
-	private static final String LANGUAGE_KEY = "language";
+	@Value("${github.user.repos.proto}")
+	private String proto;
+
+	@Value("${github.user.repos.host}")
+	private String host;
+
+	@Value("${github.user.repos.port}")
+	private String port;
+
+	@Value("${github.user.repos.path}")
+	private String path;
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see com.ciklum.service.UserService#favouriteLanguages(java.lang.String)
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
-	public List<String> favouriteLanguages(String userName) throws IOException {
+	public List<String> favouriteLanguages(String userName) throws RestClientException, UnsupportedEncodingException {
 
-		// Variable declaration
-		List<String> result = null;
-
-		// Assign input value to a local variable
+		// Encode Github User name to prevent malformed URLs
 		String encodedUserName = URLEncoder.encode(userName, "UTF-8");
 
 		// Do a REST request to get information about repositories
-		String reposContent = getRestContent(encodedUserName);
-
-		// Convert content to a JSON Object
-		ObjectMapper mapper = new ObjectMapper();
-		Map[] repos = mapper.readValue(reposContent, Map[].class);
-
-		// No exists repositories or user doesn't have a repository
-		if (repos == null || repos.length == 0) {
-			return null;
-		}
+		List<Repo> repos = getRestContent(encodedUserName);
 
 		// Calculate results
-		result = calculateFavourite(repos);
+		List<String> result = calculateFavourite(repos);
 
-		// Return result
 		return result;
 	}
 
@@ -70,32 +64,18 @@ public class UserServiceImpl implements UserService {
 	 * 
 	 * @param userName
 	 *            Github userName
-	 * @return String with userContent
-	 * @throws IOException
-	 *             When I/O an error occur
+	 * @return List of user repositories info
+	 * @throws RestClientException
+	 *             When REST error occurs
 	 */
-	private String getRestContent(String userName) throws IOException {
+	private List<Repo> getRestContent(String userName) throws RestClientException {
 
-		// Variable declaration
-		URL url = null;
-		HttpsURLConnection con = null;
+		String curl = builRequestUrl(userName);
 
-		// Call URL to get content
-		url = new URL(GITHUB_API_USER_URL + userName + GITHUB_API_USER_REPOS);
-		con = (HttpsURLConnection) url.openConnection();
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<Repo[]> response = restTemplate.getForEntity(curl, Repo[].class);
 
-		// Get response from input
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
-		}
-		in.close();
-
-		// Return response content as String
-		return response.toString();
+		return Arrays.asList(response.getBody());
 
 	}
 
@@ -106,50 +86,31 @@ public class UserServiceImpl implements UserService {
 	 *            JSON response as a Java Object
 	 * @return List of most used languages
 	 */
-	@SuppressWarnings("rawtypes")
-	private List<String> calculateFavourite(Map[] repos) {
-		HashMap<String, Integer> count = new HashMap<String, Integer>();
-		Integer maxCount = null;
-		List<String> maxLanguages = null;
+	private List<String> calculateFavourite(List<Repo> repos) {
 
-		// Structure language counts as a Map (language --> count)
-		for (Map repo : repos) {
-			if (repo.get(LANGUAGE_KEY) != null) {
-				String language = (String) repo.get(LANGUAGE_KEY);
-				if (count.get(language) == null) {
-					count.put(language, Integer.valueOf(1));
-				} else {
-					count.put(language, count.get(language) + 1);
-				}
-			}
-		}
+		Optional<Entry<Long, List<String>>> max = repos.stream().filter(repo -> repo.getLanguage() != null)
+				.collect(Collectors.groupingBy(Repo::getLanguage, Collectors.counting())).entrySet().stream()
+				.collect(Collectors.groupingBy(Map.Entry::getValue,
+						Collectors.mapping(Map.Entry::getKey, Collectors.toList())))
+				.entrySet().stream().max((entry1, entry2) -> Long.compare(entry1.getKey(), entry2.getKey()));
 
-		// Calculate favourite language
-		for (Entry<String, Integer> entry : count.entrySet()) {
+		return max.isPresent() ? max.get().getValue() : null;
+	}
 
-			// First step, the first element is the max at this moment
-			if (maxCount == null) {
-				maxCount = entry.getValue();
-				maxLanguages = new ArrayList<>();
-				maxLanguages.add(entry.getKey());
-				continue;
-			}
+	/**
+	 * Private method to build request url to query user repos
+	 * 
+	 * @param userName
+	 *            Encoded URL userName
+	 * @return String with URL to query user repos
+	 */
+	private String builRequestUrl(String userName) {
+		StringBuilder builder = new StringBuilder();
 
-			// If this element has the same count then other favourite language
-			if (maxCount.intValue() == entry.getValue().intValue()) {
-				maxLanguages.add(entry.getKey());
-			}
+		builder.append(proto).append(host).append(":").append(port).append(path.replace(":user", userName));
 
-			// New favourite language more appereances
-			if (maxCount.intValue() < entry.getValue().intValue()) {
-				maxCount = entry.getValue();
-				maxLanguages.clear();
-				maxLanguages.add(entry.getKey());
-			}
-		}
+		return builder.toString();
 
-		// Return the result
-		return maxLanguages;
 	}
 
 }

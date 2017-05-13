@@ -2,6 +2,8 @@ package com.ciklum.controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestClientException;
 
 import com.ciklum.service.UserService;
 
@@ -52,7 +55,6 @@ public class UserController {
 	@RequestMapping("/user")
 	public String home(@RequestParam(value = "userName", required = true) String userName, Model model) {
 
-		// Variable definition
 		List<String> errors = new ArrayList<String>();
 		List<String> languages = null;
 
@@ -61,8 +63,9 @@ public class UserController {
 			errors.add("Empty user");
 		} else {
 
-			// Query languages
 			try {
+				
+				// Query languages
 				languages = userService.favouriteLanguages(userName);
 
 				// Check if user exists or has repositories
@@ -70,9 +73,13 @@ public class UserController {
 					errors.add("[" + userName + "] doesn't have repositories");
 				}
 
-			} catch (FileNotFoundException e) {
-				errors.add("[" + userName + "] doesn't exist");
-			} catch (IOException e) {
+			} catch (RestClientException e) {
+				if (e.getMessage() != null && e.getMessage().contains("404")) {
+					errors.add("[" + userName + "] doesn't exist");
+				} else {
+					errors.add("Error on Github Call for user [" + userName + "]: " + e.getMessage());
+				}
+			} catch (UnsupportedEncodingException e) {
 				errors.add("Error on Github Call for user [" + userName + "]: " + e.getMessage());
 			}
 		}
@@ -82,7 +89,6 @@ public class UserController {
 		model.addAttribute("language", languages);
 		model.addAttribute("errors", errors);
 
-		// Return navigation
 		return INDEX_NAVIGATION;
 	}
 
