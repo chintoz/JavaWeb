@@ -30,6 +30,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
+        
+        <!-- Test dependencies -->
+        <dependency>
+		    <groupId>com.github.tomakehurst</groupId>
+		    <artifactId>wiremock</artifactId>
+		    <version>2.6.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -60,6 +67,22 @@
 					<configuration>
 						<failOnMissingWebXml>false</failOnMissingWebXml>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.jsonschema2pojo</groupId>
+					<artifactId>jsonschema2pojo-maven-plugin</artifactId>
+					<version>0.4.34</version>
+					<configuration>
+						<sourceDirectory>${basedir}/src/main/resources/schemas</sourceDirectory>
+						<targetPackage>com.ciklum.model</targetPackage>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>generate</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
