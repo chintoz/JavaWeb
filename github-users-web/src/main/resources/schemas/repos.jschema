@@ -1,0 +1,358 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {},
+  "id": "https://api.github.com/users/",
+  "items": {
+    "id": "/items",
+    "properties": {
+      "archive_url": {
+        "id": "/items/properties/archive_url",
+        "type": "string"
+      },
+      "assignees_url": {
+        "id": "/items/properties/assignees_url",
+        "type": "string"
+      },
+      "blobs_url": {
+        "id": "/items/properties/blobs_url",
+        "type": "string"
+      },
+      "branches_url": {
+        "id": "/items/properties/branches_url",
+        "type": "string"
+      },
+      "clone_url": {
+        "id": "/items/properties/clone_url",
+        "type": "string"
+      },
+      "collaborators_url": {
+        "id": "/items/properties/collaborators_url",
+        "type": "string"
+      },
+      "comments_url": {
+        "id": "/items/properties/comments_url",
+        "type": "string"
+      },
+      "commits_url": {
+        "id": "/items/properties/commits_url",
+        "type": "string"
+      },
+      "compare_url": {
+        "id": "/items/properties/compare_url",
+        "type": "string"
+      },
+      "contents_url": {
+        "id": "/items/properties/contents_url",
+        "type": "string"
+      },
+      "contributors_url": {
+        "id": "/items/properties/contributors_url",
+        "type": "string"
+      },
+      "created_at": {
+        "id": "/items/properties/created_at",
+        "type": "string"
+      },
+      "default_branch": {
+        "id": "/items/properties/default_branch",
+        "type": "string"
+      },
+      "deployments_url": {
+        "id": "/items/properties/deployments_url",
+        "type": "string"
+      },
+      "description": {
+        "id": "/items/properties/description",
+        "type": "string"
+      },
+      "downloads_url": {
+        "id": "/items/properties/downloads_url",
+        "type": "string"
+      },
+      "events_url": {
+        "id": "/items/properties/events_url",
+        "type": "string"
+      },
+      "fork": {
+        "id": "/items/properties/fork",
+        "type": "boolean"
+      },
+      "forks": {
+        "id": "/items/properties/forks",
+        "type": "integer"
+      },
+      "forks_count": {
+        "id": "/items/properties/forks_count",
+        "type": "integer"
+      },
+      "forks_url": {
+        "id": "/items/properties/forks_url",
+        "type": "string"
+      },
+      "full_name": {
+        "id": "/items/properties/full_name",
+        "type": "string"
+      },
+      "git_commits_url": {
+        "id": "/items/properties/git_commits_url",
+        "type": "string"
+      },
+      "git_refs_url": {
+        "id": "/items/properties/git_refs_url",
+        "type": "string"
+      },
+      "git_tags_url": {
+        "id": "/items/properties/git_tags_url",
+        "type": "string"
+      },
+      "git_url": {
+        "id": "/items/properties/git_url",
+        "type": "string"
+      },
+      "has_downloads": {
+        "id": "/items/properties/has_downloads",
+        "type": "boolean"
+      },
+      "has_issues": {
+        "id": "/items/properties/has_issues",
+        "type": "boolean"
+      },
+      "has_pages": {
+        "id": "/items/properties/has_pages",
+        "type": "boolean"
+      },
+      "has_projects": {
+        "id": "/items/properties/has_projects",
+        "type": "boolean"
+      },
+      "has_wiki": {
+        "id": "/items/properties/has_wiki",
+        "type": "boolean"
+      },
+      "homepage": {
+        "id": "/items/properties/homepage",
+        "type": "null"
+      },
+      "hooks_url": {
+        "id": "/items/properties/hooks_url",
+        "type": "string"
+      },
+      "html_url": {
+        "id": "/items/properties/html_url",
+        "type": "string"
+      },
+      "id": {
+        "id": "/items/properties/id",
+        "type": "integer"
+      },
+      "issue_comment_url": {
+        "id": "/items/properties/issue_comment_url",
+        "type": "string"
+      },
+      "issue_events_url": {
+        "id": "/items/properties/issue_events_url",
+        "type": "string"
+      },
+      "issues_url": {
+        "id": "/items/properties/issues_url",
+        "type": "string"
+      },
+      "keys_url": {
+        "id": "/items/properties/keys_url",
+        "type": "string"
+      },
+      "labels_url": {
+        "id": "/items/properties/labels_url",
+        "type": "string"
+      },
+      "language": {
+        "id": "/items/properties/language",
+        "type": "string"
+      },
+      "languages_url": {
+        "id": "/items/properties/languages_url",
+        "type": "string"
+      },
+      "merges_url": {
+        "id": "/items/properties/merges_url",
+        "type": "string"
+      },
+      "milestones_url": {
+        "id": "/items/properties/milestones_url",
+        "type": "string"
+      },
+      "mirror_url": {
+        "id": "/items/properties/mirror_url",
+        "type": "null"
+      },
+      "name": {
+        "id": "/items/properties/name",
+        "type": "string"
+      },
+      "notifications_url": {
+        "id": "/items/properties/notifications_url",
+        "type": "string"
+      },
+      "open_issues": {
+        "id": "/items/properties/open_issues",
+        "type": "integer"
+      },
+      "open_issues_count": {
+        "id": "/items/properties/open_issues_count",
+        "type": "integer"
+      },
+      "owner": {
+        "id": "/items/properties/owner",
+        "properties": {
+          "avatar_url": {
+            "id": "/items/properties/owner/properties/avatar_url",
+            "type": "string"
+          },
+          "events_url": {
+            "id": "/items/properties/owner/properties/events_url",
+            "type": "string"
+          },
+          "followers_url": {
+            "id": "/items/properties/owner/properties/followers_url",
+            "type": "string"
+          },
+          "following_url": {
+            "id": "/items/properties/owner/properties/following_url",
+            "type": "string"
+          },
+          "gists_url": {
+            "id": "/items/properties/owner/properties/gists_url",
+            "type": "string"
+          },
+          "gravatar_id": {
+            "id": "/items/properties/owner/properties/gravatar_id",
+            "type": "string"
+          },
+          "html_url": {
+            "id": "/items/properties/owner/properties/html_url",
+            "type": "string"
+          },
+          "id": {
+            "id": "/items/properties/owner/properties/id",
+            "type": "integer"
+          },
+          "login": {
+            "id": "/items/properties/owner/properties/login",
+            "type": "string"
+          },
+          "organizations_url": {
+            "id": "/items/properties/owner/properties/organizations_url",
+            "type": "string"
+          },
+          "received_events_url": {
+            "id": "/items/properties/owner/properties/received_events_url",
+            "type": "string"
+          },
+          "repos_url": {
+            "id": "/items/properties/owner/properties/repos_url",
+            "type": "string"
+          },
+          "site_admin": {
+            "id": "/items/properties/owner/properties/site_admin",
+            "type": "boolean"
+          },
+          "starred_url": {
+            "id": "/items/properties/owner/properties/starred_url",
+            "type": "string"
+          },
+          "subscriptions_url": {
+            "id": "/items/properties/owner/properties/subscriptions_url",
+            "type": "string"
+          },
+          "type": {
+            "id": "/items/properties/owner/properties/type",
+            "type": "string"
+          },
+          "url": {
+            "id": "/items/properties/owner/properties/url",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "private": {
+        "id": "/items/properties/private",
+        "type": "boolean"
+      },
+      "pulls_url": {
+        "id": "/items/properties/pulls_url",
+        "type": "string"
+      },
+      "pushed_at": {
+        "id": "/items/properties/pushed_at",
+        "type": "string"
+      },
+      "releases_url": {
+        "id": "/items/properties/releases_url",
+        "type": "string"
+      },
+      "size": {
+        "id": "/items/properties/size",
+        "type": "integer"
+      },
+      "ssh_url": {
+        "id": "/items/properties/ssh_url",
+        "type": "string"
+      },
+      "stargazers_count": {
+        "id": "/items/properties/stargazers_count",
+        "type": "integer"
+      },
+      "stargazers_url": {
+        "id": "/items/properties/stargazers_url",
+        "type": "string"
+      },
+      "statuses_url": {
+        "id": "/items/properties/statuses_url",
+        "type": "string"
+      },
+      "subscribers_url": {
+        "id": "/items/properties/subscribers_url",
+        "type": "string"
+      },
+      "subscription_url": {
+        "id": "/items/properties/subscription_url",
+        "type": "string"
+      },
+      "svn_url": {
+        "id": "/items/properties/svn_url",
+        "type": "string"
+      },
+      "tags_url": {
+        "id": "/items/properties/tags_url",
+        "type": "string"
+      },
+      "teams_url": {
+        "id": "/items/properties/teams_url",
+        "type": "string"
+      },
+      "trees_url": {
+        "id": "/items/properties/trees_url",
+        "type": "string"
+      },
+      "updated_at": {
+        "id": "/items/properties/updated_at",
+        "type": "string"
+      },
+      "url": {
+        "id": "/items/properties/url",
+        "type": "string"
+      },
+      "watchers": {
+        "id": "/items/properties/watchers",
+        "type": "integer"
+      },
+      "watchers_count": {
+        "id": "/items/properties/watchers_count",
+        "type": "integer"
+      }
+    },
+    "type": "object"
+  },
+  "type": "array"
+}
