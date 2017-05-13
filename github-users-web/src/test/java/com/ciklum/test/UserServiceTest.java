@@ -1,31 +1,66 @@
 package com.ciklum.test;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.Assert.assertEquals;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.ciklum.service.UserService;
+import com.github.tomakehurst.wiremock.WireMockServer;
 
 /**
  * Test for UserService
+ * 
  * @author Jacinto J. Mena Lomeña
  *
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@TestPropertySource(locations = "classpath:test.properties")
 public class UserServiceTest {
 
 	@Autowired
 	UserService userService;
+
+	@Value("${github.user.repos.path}")
+	private String path;
+
+	@Value("${github.user.repos.port}")
+	private String port;
+
+	private WireMockServer server;
+
+	@Before
+	public void init() {
+
+		// Initialize server
+		if (server == null) {
+			server = new WireMockServer(options().port(Integer.valueOf(port)));
+		}
+
+		server.start();
+	}
+
+	@After
+	public void finish() {
+		server.stop();
+	}
 
 	/**
 	 * Test to check not existing users
@@ -38,17 +73,22 @@ public class UserServiceTest {
 
 		try {
 
+			String mockPath = "responses/notexisting.json";
+
+			server.stubFor(get(urlEqualTo(path.replace(":user", userName))).willReturn(aResponse().withStatus(404)
+					.withHeader("Content-Type", "application/json; charset=utf-8").withBodyFile(mockPath)));
+
 			// Call with a not existing user
 			userService.favouriteLanguages(userName);
 
 			// Fail because do not produce error
 			fail("Not existing user must throw an exception");
 
-		} catch (FileNotFoundException fnfe) {
+		} catch (HttpClientErrorException fnfe) {
 			// Everything OK
 		} catch (Exception e) {
 			// Fail other exception
-			fail("Not existing users must throw FileNotFoundException", e.getCause());
+			fail("Not existing users must throw HttpClientErrorException", e.getCause());
 		}
 	}
 
@@ -62,6 +102,11 @@ public class UserServiceTest {
 		String userName = "jjmena8080";
 
 		try {
+
+			String mockPath = "responses/jjmena8080.json";
+
+			server.stubFor(get(urlEqualTo(path.replace(":user", userName))).willReturn(aResponse().withStatus(200)
+					.withHeader("Content-Type", "application/json; charset=utf-8").withBodyFile(mockPath)));
 
 			// Call with an existing user
 			List<String> favouriteLanguages = userService.favouriteLanguages(userName);
@@ -85,6 +130,11 @@ public class UserServiceTest {
 		String userName = "jjmena";
 
 		try {
+
+			String mockPath = "responses/jjmena.json";
+
+			server.stubFor(get(urlEqualTo(path.replace(":user", userName))).willReturn(aResponse().withStatus(200)
+					.withHeader("Content-Type", "application/json;").withBodyFile(mockPath)));
 
 			// Call with an existing user
 			List<String> favouriteLanguages = userService.favouriteLanguages(userName);
