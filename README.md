@@ -31,7 +31,11 @@ To disable test execution launch
 14/05/2017 IMPROVEMENTS
 
 Changed GitHub API to Github API v3. The URL and the response were changed in this new version, however response still have 'language' property.
+
 REST request with RestTemplate to automatically fill Repo[] entity rather than using a HashMap to set all repository fields.
+
 Configured GitHub URL in application.properties file.
+
 WireMock is used to simulate GitHub API responses. There are few sample responses in '/github-users-web/src/test/resources/__files/responses' folder for each case.
+
 Streams are used to calculate favourite language of the user.
